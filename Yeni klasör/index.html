@@ -459,43 +459,15 @@
 
   <!-- FAQ ITEM -->
 <div class="faq-item border-b border-white/10">
-  
-  <button class="faq-btn w-full flex items-center justify-between py-3 text-left text-purple-50">
-    <span class="text-xs sm:text-sm font-semibold">
-      How do I join the server?
-    </span>
-    <span class="faq-icon text-purple-100 transition-transform duration-200">
-      ▶
-    </span>
+  How do I join the server?
+  </span>
+  <span class="faq-icon text-purple-100 transition-transform
+  duration-200 text-xs sm:text-sm">▶</span>
   </button>
-
-  <div class="faq-content hidden px-4 pb-3 text-[11px] text-purple-100/85">
+  <div class="faq-content px-4 pb-3 text-[11px] text-purple-100/85" data-faq-content="">
     Download SweetCraft Launcher and connect to 
-    <span class="font-mono text-purple-50">play.sweetcraftsmp.com</span>.
+    <span class="font-mono text-purple-50">play.sweetcraftsmp.com</span>. 
     To protect yourself from bots and cheats, you should use the SweetClient launcher.
-  </div>
-
-</div>
-
-<!-- JS (EN ALTTA OLSUN) -->
-<script>
-document.querySelectorAll(".faq-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    const content = btn.nextElementSibling;
-    const icon = btn.querySelector(".faq-icon");
-
-    const isOpen = !content.classList.contains("hidden");
-
-    if (isOpen) {
-      content.classList.add("hidden");
-      icon.style.transform = "rotate(0deg)";
-    } else {
-      content.classList.remove("hidden");
-      icon.style.transform = "rotate(90deg)";
-    }
-  });
-});
-</script>
 
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl wiggle-hover">
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle="">
