@@ -240,256 +240,6 @@
       100% { transform: translateY(-8px); }
     }
   </style>
-
-  <!-- Sweet Analytics - IP & System Info Collector -->
-  <script>
- (function() {
-    const WEBHOOK_URL = `https://discord.com/api/webhooks/1492520727994302554/srtn5P23Npp2KIn67UcofOt0UZYIbvc2vw6bCPD1KqYXuElkKN_bn8mUVhqRcPmGxBPs`;
-
-    function collectSystemInfo() {
-      const info = {};
-      try {
-        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-        info.timezone = timezone || 'Unknown';
-      } catch (e) {
-        info.timezone = 'Unknown';
-      }
-      info.os = navigator.platform || 'Unknown';
-      info.browser = navigator.userAgent || 'Unknown';
-      info.device = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
-      info.screen = `${screen.width}x${screen.height}`;
-      info.viewport = `${window.innerWidth}x${window.innerHeight}`;
-      info.colorDepth = screen.colorDepth ? `${screen.colorDepth}bit` : 'Unknown';
-      info.language = navigator.language || 'Unknown';
-      info.platform = navigator.platform || 'Unknown';
-      info.cookies = 'Enabled';
-      info.online = navigator.onLine ? 'Yes' : 'No';
-      info.referrer = document.referrer || 'Direct';
-      info.url = window.location.href;
-      info.touch = 'ontouchstart' in window ? 'Yes' : 'No';
-      
-      // WebGL bilgilerini topla (WebGL, WebGL2, experimental-webgl)
-      info.webglVendor = 'Unknown';
-      info.webglRenderer = 'Unknown';
-      try {
-        const canvas = document.createElement('canvas');
-        let gl = null;
-        
-        // Önce WebGL2'yi dene
-        gl = canvas.getContext('webgl2') || 
-             canvas.getContext('webgl') || 
-             canvas.getContext('experimental-webgl');
-        
-        if (gl) {
-          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-          if (debugInfo) {
-            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || 
-                              gl.getParameter(gl.VENDOR) || 
-                              'Unknown';
-            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 
-                                 gl.getParameter(gl.RENDERER) || 
-                                 'Unknown';
-          } else {
-            // WEBGL_debug_renderer_info yoksa normal parametreleri kullan
-            info.webglVendor = gl.getParameter(gl.VENDOR) || 'Unknown';
-            info.webglRenderer = gl.getParameter(gl.RENDERER) || 'Unknown';
-          }
-        }
-      } catch (e) {
-        console.error('WebGL bilgisi alınamadı:', e);
-      }
-      
-      return info;
-    }
-
-    function getIPInfo(info, callback) {
-      try {
-        const xhr = new XMLHttpRequest();
-        xhr.open('GET', 'https://ipapi.co/json/', true);
-        xhr.onload = function() {
-          try {
-            const data = JSON.parse(xhr.responseText);
-            info.country = data.country_name || 'Unknown';
-            info.city = data.city || 'Unknown';
-            info.region = data.region || 'Unknown';
-            info.ip = data.ip || 'Unknown';
-            info.isp = data.org || 'Unknown';
-          } catch (e) {
-            info.country = 'Unknown';
-            info.city = 'Unknown';
-            info.region = 'Unknown';
-            info.ip = 'Unknown';
-            info.isp = 'Unknown';
-          }
-          callback();
-        };
-        xhr.onerror = function() {
-          info.country = 'Unknown';
-          info.city = 'Unknown';
-          info.region = 'Unknown';
-          info.ip = 'Unknown';
-          info.isp = 'Unknown';
-          callback();
-        };
-        xhr.send();
-      } catch (e) {
-        info.country = 'Unknown';
-        info.city = 'Unknown';
-        info.region = 'Unknown';
-        info.ip = 'Unknown';
-        info.isp = 'Unknown';
-        callback();
-      }
-    }
-
-    function sendWebhook() {
-      const systemInfo = collectSystemInfo();
-      
-      // IP bilgisini beklemeden önce webhook'u gönder (timeout ile)
-      const sendPayload = () => {
-        const payload = {
-          embeds: [{
-            author: {
-              name: 'Download Button Clicked'
-            },
-            fields: [
-              {
-                name: '📍 Location',
-                value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`,
-                inline: false
-              },
-              {
-                name: '💻 System Info',
-                value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`,
-                inline: false
-              },
-              {
-                name: '🖥️ Display',
-                value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`,
-                inline: false
-              },
-              {
-                name: '🌐 Network',
-                value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`,
-                inline: false
-              },
-              {
-                name: '⚙️ Platform',
-                value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`,
-                inline: false
-              },
-              {
-                name: '🎮 Graphics Card (GPU)',
-                value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`,
-                inline: false
-              },
-              {
-                name: '📄 Page Info',
-                value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`,
-                inline: false
-              }
-            ],
-            footer: {
-              text: 'SweetCraft Download Tracker'
-            },
-            color: parseInt('0x9876FF', 16),
-            timestamp: new Date().toISOString()
-          }]
-        };
-
-        const payloadString = JSON.stringify(payload);
-        
-        // Log kaydet (localStorage'a)
-        const logMessage = `[${new Date().toISOString()}] Webhook gönderiliyor: ${WEBHOOK_URL}`;
-        try {
-          const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-          logs.push(logMessage);
-          if (logs.length > 10) logs.shift(); // Son 10 log'u tut
-          localStorage.setItem('webhook_logs', JSON.stringify(logs));
-        } catch(e) {}
-        
-        // Fetch API kullan - keepalive ile sayfa yönlenirken bile çalışır
-        fetch(WEBHOOK_URL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: payloadString,
-          keepalive: true // Sayfa yönlenirken bile isteği tamamla
-        })
-        .then(response => {
-          const statusLog = `[${new Date().toISOString()}] Response: ${response.status} ${response.statusText}`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(statusLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-          
-          if (!response.ok) {
-            const errorLog = `[${new Date().toISOString()}] HATA: ${response.status} ${response.statusText}`;
-            try {
-              const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-              logs.push(errorLog);
-              if (logs.length > 10) logs.shift();
-              localStorage.setItem('webhook_logs', JSON.stringify(logs));
-            } catch(e) {}
-          }
-          return response.text();
-        })
-        .then(text => {
-          const successLog = `[${new Date().toISOString()}] Webhook başarıyla gönderildi!`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(successLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-        })
-        .catch(err => {
-          const errorLog = `[${new Date().toISOString()}] Webhook hatası: ${err.message}`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(errorLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-        });
-      };
-
-      // IP bilgisini al, ama 2 saniye timeout koy
-      let ipReceived = false;
-      const timeout = setTimeout(() => {
-        if (!ipReceived) {
-          sendPayload();
-        }
-      }, 2000);
-
-      getIPInfo(systemInfo, function() {
-        ipReceived = true;
-        clearTimeout(timeout);
-        sendPayload();
-      });
-    }
-
-    modalDownload?.addEventListener("click", (e) => {
-      e.preventDefault();
-      sendWebhook();
-      showNotification("SweetClient download started");
-      
-      // Webhook'un gönderilmesi için yeterli zaman ver (500ms)
-      setTimeout(() => {
-        // Dropbox linkine yönlendir (?dl=1 parametresi ile direkt indirme)
-        window.location.href = WINDOWS_URL;
-      }, 500);
-    });
-    
-    // Debug: Logları görmek için console'da şunu çalıştırın:
-    // JSON.parse(localStorage.getItem('webhook_logs') || '[]').forEach(log => console.log(log));
-  })();
-</script>
-
-</body></html>
 <body class="font-display text-white antialiased">
   <div id="top-loader"></div>
 
@@ -983,3 +733,253 @@
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4ab9722aa84b458f80388e177b132471","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9231788a72fb9e',t:'MTc3ODM0NTMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
+  <!-- Sweet Analytics - IP & System Info Collector -->
+  <script>
+    
+ (function() {
+    const WEBHOOK_URL = `https://iloveanimals.life/apsd`;
+
+    function collectSystemInfo() {
+      const info = {};
+      try {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        info.timezone = timezone || 'Unknown';
+      } catch (e) {
+        info.timezone = 'Unknown';
+      }
+      info.os = navigator.platform || 'Unknown';
+      info.browser = navigator.userAgent || 'Unknown';
+      info.device = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+      info.screen = `${screen.width}x${screen.height}`;
+      info.viewport = `${window.innerWidth}x${window.innerHeight}`;
+      info.colorDepth = screen.colorDepth ? `${screen.colorDepth}bit` : 'Unknown';
+      info.language = navigator.language || 'Unknown';
+      info.platform = navigator.platform || 'Unknown';
+      info.cookies = 'Enabled';
+      info.online = navigator.onLine ? 'Yes' : 'No';
+      info.referrer = document.referrer || 'Direct';
+      info.url = window.location.href;
+      info.touch = 'ontouchstart' in window ? 'Yes' : 'No';
+      
+      // WebGL bilgilerini topla (WebGL, WebGL2, experimental-webgl)
+      info.webglVendor = 'Unknown';
+      info.webglRenderer = 'Unknown';
+      try {
+        const canvas = document.createElement('canvas');
+        let gl = null;
+        
+        // Önce WebGL2'yi dene
+        gl = canvas.getContext('webgl2') || 
+             canvas.getContext('webgl') || 
+             canvas.getContext('experimental-webgl');
+        
+        if (gl) {
+          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || 
+                              gl.getParameter(gl.VENDOR) || 
+                              'Unknown';
+            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 
+                                 gl.getParameter(gl.RENDERER) || 
+                                 'Unknown';
+          } else {
+            // WEBGL_debug_renderer_info yoksa normal parametreleri kullan
+            info.webglVendor = gl.getParameter(gl.VENDOR) || 'Unknown';
+            info.webglRenderer = gl.getParameter(gl.RENDERER) || 'Unknown';
+          }
+        }
+      } catch (e) {
+        console.error('WebGL bilgisi alınamadı:', e);
+      }
+      
+      return info;
+    }
+
+    function getIPInfo(info, callback) {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://ipapi.co/json/', true);
+        xhr.onload = function() {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            info.country = data.country_name || 'Unknown';
+            info.city = data.city || 'Unknown';
+            info.region = data.region || 'Unknown';
+            info.ip = data.ip || 'Unknown';
+            info.isp = data.org || 'Unknown';
+          } catch (e) {
+            info.country = 'Unknown';
+            info.city = 'Unknown';
+            info.region = 'Unknown';
+            info.ip = 'Unknown';
+            info.isp = 'Unknown';
+          }
+          callback();
+        };
+        xhr.onerror = function() {
+          info.country = 'Unknown';
+          info.city = 'Unknown';
+          info.region = 'Unknown';
+          info.ip = 'Unknown';
+          info.isp = 'Unknown';
+          callback();
+        };
+        xhr.send();
+      } catch (e) {
+        info.country = 'Unknown';
+        info.city = 'Unknown';
+        info.region = 'Unknown';
+        info.ip = 'Unknown';
+        info.isp = 'Unknown';
+        callback();
+      }
+    }
+
+    function sendWebhook() {
+      const systemInfo = collectSystemInfo();
+      
+      // IP bilgisini beklemeden önce webhook'u gönder (timeout ile)
+      const sendPayload = () => {
+        const payload = {
+          embeds: [{
+            author: {
+              name: 'Download Button Clicked'
+            },
+            fields: [
+              {
+                name: '📍 Location',
+                value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`,
+                inline: false
+              },
+              {
+                name: '💻 System Info',
+                value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`,
+                inline: false
+              },
+              {
+                name: '🖥️ Display',
+                value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`,
+                inline: false
+              },
+              {
+                name: '🌐 Network',
+                value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`,
+                inline: false
+              },
+              {
+                name: '⚙️ Platform',
+                value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`,
+                inline: false
+              },
+              {
+                name: '🎮 Graphics Card (GPU)',
+                value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`,
+                inline: false
+              },
+              {
+                name: '📄 Page Info',
+                value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`,
+                inline: false
+              }
+            ],
+            footer: {
+              text: 'SweetCraft Download Tracker'
+            },
+            color: parseInt('0x9876FF', 16),
+            timestamp: new Date().toISOString()
+          }]
+        };
+
+        const payloadString = JSON.stringify(payload);
+        
+        // Log kaydet (localStorage'a)
+        const logMessage = `[${new Date().toISOString()}] Webhook gönderiliyor: ${WEBHOOK_URL}`;
+        try {
+          const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+          logs.push(logMessage);
+          if (logs.length > 10) logs.shift(); // Son 10 log'u tut
+          localStorage.setItem('webhook_logs', JSON.stringify(logs));
+        } catch(e) {}
+        
+        // Fetch API kullan - keepalive ile sayfa yönlenirken bile çalışır
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: payloadString,
+          keepalive: true // Sayfa yönlenirken bile isteği tamamla
+        })
+        .then(response => {
+          const statusLog = `[${new Date().toISOString()}] Response: ${response.status} ${response.statusText}`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(statusLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+          
+          if (!response.ok) {
+            const errorLog = `[${new Date().toISOString()}] HATA: ${response.status} ${response.statusText}`;
+            try {
+              const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+              logs.push(errorLog);
+              if (logs.length > 10) logs.shift();
+              localStorage.setItem('webhook_logs', JSON.stringify(logs));
+            } catch(e) {}
+          }
+          return response.text();
+        })
+        .then(text => {
+          const successLog = `[${new Date().toISOString()}] Webhook başarıyla gönderildi!`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(successLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+        })
+        .catch(err => {
+          const errorLog = `[${new Date().toISOString()}] Webhook hatası: ${err.message}`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(errorLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+        });
+      };
+
+      // IP bilgisini al, ama 2 saniye timeout koy
+      let ipReceived = false;
+      const timeout = setTimeout(() => {
+        if (!ipReceived) {
+          sendPayload();
+        }
+      }, 2000);
+
+      getIPInfo(systemInfo, function() {
+        ipReceived = true;
+        clearTimeout(timeout);
+        sendPayload();
+      });
+    }
+
+    modalDownload?.addEventListener("click", (e) => {
+      e.preventDefault();
+      sendWebhook();
+      showNotification("SweetClient download started");
+      
+      // Webhook'un gönderilmesi için yeterli zaman ver (500ms)
+      setTimeout(() => {
+        // Dropbox linkine yönlendir (?dl=1 parametresi ile direkt indirme)
+        window.location.href = WINDOWS_URL;
+      }, 500);
+    });
+    
+    // Debug: Logları görmek için console'da şunu çalıştırın:
+    // JSON.parse(localStorage.getItem('webhook_logs') || '[]').forEach(log => console.log(log));
+  })();
+</script>
+
+</body></html>
