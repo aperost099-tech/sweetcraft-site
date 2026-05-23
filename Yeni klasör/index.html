@@ -1,1425 +1,888 @@
 <html lang="en">
 
-
-
 <head>
-
   <meta charset="utf-8" />
-
   <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-
   <title>SweetCraft • The Sweetest SMP</title>
-
   <link rel="icon" href="media/logo.png" type="image/png">
 
-
-
   <!-- Tailwind -->
-
   <script src="https://cdn.tailwindcss.com/?plugins=forms,typography"></script>
-
   <script>
-
     tailwind.config = {
-
       theme: {
-
         extend: {
-
           colors: {
-
             primary: "#ff69b4",
-
             primaryDark: "#e0569b",
-
             bg: "#0b1020",
-
             sweetPink: "#ffb3d9",
-
             sweetRose: "#ffc0e5",
-
             sweetLavender: "#e6b3ff",
-
             sweetMint: "#b3ffe6",
-
             sweetPeach: "#ffd9b3",
-
           },
-
           fontFamily: {
-
             display: ["Poppins", "system-ui", "sans-serif"],
-
           },
-
           boxShadow: {
-
             cute: "0 18px 40px rgba(255,105,180,0.35)",
-
           },
-
           borderRadius: {
-
             xl2: "1.25rem",
-
             xl3: "1.5rem",
-
             xl4: "2rem",
-
           },
-
         },
-
       },
-
     };
-
   </script>
 
-
-
   <!-- Font -->
-
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
-
     rel="stylesheet" />
 
-
-
   <style>
-
     html {
-
       scroll-behavior: smooth;
-
     }
-
     
-
     * {
-
       -webkit-font-smoothing: antialiased;
-
       -moz-osx-font-smoothing: grayscale;
-
     }
-
-
 
     body {
-
       background: radial-gradient(circle at top, #4a1a3d 0, #2d0f25 30%, #1a0514 60%, #0f000a 100%);
-
       background-attachment: fixed;
-
       cursor: default;
-
     }
-
-
 
     /* Linkler ve tıklanabilir öğeler için cursor pointer */
-
     a, button, [role="button"], .pixel-btn, .download-btn, .gallery-card, .feature-card {
-
       cursor: pointer;
-
     }
-
     
-
     /* Form öğeleri için normal cursor */
-
     input, textarea, select {
-
       cursor: text;
-
     }
-
-
 
     /* Loading bar */
-
     #top-loader {
-
       position: fixed;
-
       top: 0;
-
       left: 0;
-
       height: 3px;
-
       width: 0;
-
       background: linear-gradient(90deg, #ff69b4, #ffb7e2);
-
       z-index: 9999;
-
       transition: width .25s ease-out, opacity .4s ease-out;
-
     }
-
-
 
     /* Buton stilleri */
-
     .pixel-btn {
-
       box-shadow: 0 0 0 2px #fff4fa, 0 10px 0 #b5447e, 0 18px 30px rgba(255, 105, 180, 0.3);
-
       transform: translateY(0);
-
       transition: transform .15s ease-out, box-shadow .15s ease-out;
-
       border-radius: 999px;
-
     }
-
-
 
     .pixel-btn:hover {
-
       transform: translateY(2px) scale(1.02);
-
       box-shadow: 0 0 0 2px #fff4fa, 0 5px 0 #8d315f, 0 15px 35px rgba(255, 105, 180, 0.4);
-
     }
-
-
 
     .pixel-btn:active {
-
       transform: translateY(6px) scale(0.98);
-
     }
-
-
 
     .download-btn {
-
       font-size: 1rem;
-
       padding: 1rem 2rem;
-
       box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3), 
-
                   0 12px 0 #7c3aed, 
-
                   0 20px 40px rgba(168, 85, 247, 0.5);
-
       background: linear-gradient(135deg, #a855f7, #9333ea, #c084fc, #d8b4fe, #a855f7);
-
       background-size: 200% 200%;
-
       border-radius: 999px;
-
       transition: transform .15s ease-out, box-shadow .15s ease-out;
-
     }
-
-
 
     .download-btn:hover {
-
       transform: translateY(3px) scale(1.03);
-
       box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.4), 
-
                   0 6px 0 #6d28d9, 
-
                   0 25px 50px rgba(168, 85, 247, 0.6);
-
     }
-
-
 
     .download-btn:active {
-
       transform: translateY(8px) scale(0.99);
-
     }
-
-
 
     /* Kart hover efektleri */
-
     .gallery-card, .feature-card {
-
       transition: transform .2s ease-out, box-shadow .2s ease-out;
-
       border-radius: 1.25rem;
-
     }
-
-
 
     .gallery-card:hover, .feature-card:hover {
-
       transform: translateY(-5px);
-
       box-shadow: 0 20px 40px rgba(255, 105, 180, 0.25);
-
     }
-
-
 
     /* FAQ stilleri */
-
     .faq-item button[aria-expanded="true"] .faq-icon {
-
       transform: rotate(90deg);
-
     }
-
-
 
     .faq-content {
-
       max-height: 0;
-
       opacity: 0;
-
       overflow: hidden;
-
       transition: max-height 0.3s ease-out, opacity 0.25s ease-out;
-
     }
-
-
 
     .faq-content.open {
-
       max-height: 200px;
-
       opacity: 1;
-
     }
-
-
 
     /* Notification */
-
     .notification {
-
       position: fixed;
-
       top: 90px;
-
       right: 20px;
-
       background: linear-gradient(135deg, #ff69b4, #ffb7e2);
-
       color: #fff;
-
       padding: 10px 16px;
-
       border-radius: 999px;
-
       box-shadow: 0 10px 25px rgba(255, 105, 180, 0.4);
-
       z-index: 60;
-
       display: flex;
-
       gap: 8px;
-
       align-items: center;
-
       font-size: 0.75rem;
-
       animation: slideIn 0.2s ease-out, fadeOut 0.3s ease-in 2.4s forwards;
-
     }
-
-
 
     @keyframes slideIn {
-
       from { transform: translateX(200px); opacity: 0; }
-
       to { transform: none; opacity: 1; }
-
     }
-
-
 
     @keyframes fadeOut {
-
       to { opacity: 0; transform: translateX(200px); }
-
     }
-
-
 
     /* Modal */
-
     .backdrop-hidden {
-
       opacity: 0;
-
       pointer-events: none;
-
     }
-
-
 
     .backdrop-visible {
-
       opacity: 1;
-
       posinter-events: auto;
-
     }
-
-
 
     .modal-scale-in {
-
       transform: translateY(10px) scale(0.97);
-
       opacity: 0;
-
       transition: all 0.2s ease-out;
-
     }
-
-
 
     .modal-scale-in.modal-open {
-
       transform: translateY(0) scale(1);
-
       opacity: 1;
-
     }
-
-
 
     /* Video optimizasyonu */
-
     .preview-video {
-
       transform: translateZ(0);
-
       backface-visibility: hidden;
-
     }
-
-
 
     @media (max-width: 768px) {
-
       .preview-video {
-
         display: none;
-
       }
-
     }
-
-
 
     /* Scroll reveal */
-
     .scroll-reveal {
-
       opacity: 0;
-
       transform: translateY(20px);
-
       transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-
     }
-
-
 
     .scroll-reveal.revealed {
-
       opacity: 1;
-
       transform: translateY(0);
-
     }
-
-
 
     /* Animasyonlar */
-
     @keyframes bounce {
-
       0%, 100% { transform: translateY(0); }
-
       50% { transform: translateY(-5px); }
-
     }
-
-
 
     .animate-bounce {
-
       animation: bounce 1s ease-in-out infinite;
-
     }
-
-
 
     .float-soft {
-
       animation: floatSoft 6s ease-in-out infinite alternate;
-
     }
-
-
 
     @keyframes floatSoft {
-
       0% { transform: translateY(0); }
-
       100% { transform: translateY(-8px); }
-
     }
-
   </style>
-
 <body class="font-display text-white antialiased">
-
   <div id="top-loader"></div>
 
-
-
   <!-- NAVBAR -->
-
   <header class="sticky top-0 z-30 border-b border-pink-500/20 bg-pink-950/50 backdrop-blur-xl transition-all duration-300" id="navbar">
-
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
       <div class="flex items-center justify-between h-16">
-
         <div class="flex items-center gap-3">
-
           <a href="#top" class="flex items-center gap-2">
-
             <img src="media/logo.png" alt="Sweet Craft icon" class="w-8 h-8 rounded-lg shadow-cute" />
-
             <div class="flex flex-col leading-tight">
-
               <span class="text-sm font-extrabold bg-gradient-to-r from-pink-300 to-rose-200 bg-clip-text text-transparent">
-
                 Sweet Craft
-
               </span>
-
               <span class="text-[10px] tracking-[0.2em] text-pink-200/70 uppercase">
-
                 Sweetest SMP
-
               </span>
-
             </div>
-
           </a>
-
           <span class="hidden sm:inline-flex text-[10px] px-3 py-1 rounded-full bg-white/5 border border-white/10 text-pink-100 font-semibold">
-
             Season 2 • Winter
-
           </span>
-
         </div>
-
-
 
         <nav class="hidden md:flex items-center gap-6 text-[11px] font-semibold">
-
           <a href="#features" class="text-pink-50/80 hover:text-white transition-all">Features</a>
-
           <a href="#gallery" class="text-pink-50/80 hover:text-white transition-all">Gallery</a>
-
           <a href="#faq" class="text-pink-50/80 hover:text-white transition-all">FAQ</a>
-
         </nav>
-
-
 
         <div class="flex items-center gap-3">
-
           <span class="hidden sm:inline-flex items-center gap-1 text-[11px] px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-emerald-200">
-
             <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-
             Online: <span id="online-count" class="font-semibold ml-0.5">124</span>
-
           </span>
 
-
-
           <button id="mobile-menu-btn" class="md:hidden p-2 text-pink-50" aria-label="Menu">
-
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-
             </svg>
-
           </button>
-
         </div>
-
       </div>
-
-
 
       <div id="mobile-menu" class="hidden md:hidden pb-3">
-
         <nav class="flex flex-col gap-2 text-[11px] font-semibold text-pink-50/90">
-
           <a href="#features" class="py-1">Features</a>
-
           <a href="#gallery" class="py-1">Gallery</a>
-
           <a href="#faq" class="py-1">FAQ</a>
-
         </nav>
-
       </div>
-
     </div>
-
   </header>
 
-
-
   <!-- MAIN -->
-
   <main class="flex-1">
-
     <!-- HERO -->
-
     <section id="top" class="relative pt-16 pb-20 sm:pt-20 sm:pb-24 overflow-hidden">
-
       <div class="absolute inset-0 -z-10">
-
         <img src="media/server4.jpg" alt="Sweet Craft Server" class="w-full h-full object-cover opacity-50" />
-
         <div class="absolute inset-0 bg-gradient-to-b from-pink-900/60 via-pink-800/40 to-pink-900/60"></div>
-
       </div>
-
-
 
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-
         <div class="grid lg:grid-cols-2 gap-10 items-center">
-
           <div class="space-y-6">
-
             <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/40 border border-pink-200/20">
-
               <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-
               <span class="text-[11px] font-semibold tracking-[0.22em] text-pink-100 uppercase">
-
                 🧸 Cozy • Zero Toxicity • SMP 🎀
-
               </span>
-
             </div>
-
-
 
             <h1 class="text-3.5xl sm:text-4xl md:text-5xl font-extrabold leading-tight">
-
               The <span class="text-pink-300">✨ sweetest ✨</span>
-
               <span class="text-pink-200">Minecraft SMP server 🎀</span>
-
             </h1>
 
-
-
             <p class="text-sm sm:text-base text-pink-100/90 max-w-md">
-
               💕 100% cozy, grief-free survival with protected claims, balanced economy and the cutest community! 💕
-
             </p>
 
-
-
            <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
-
   <!-- Sizin indirme linkiniz (Class ismine dikkat) -->
-
   <a href="https://www.dropbox.com/scl/fi/znrvbqbzsjnb3tcvulg4k/SweetClient.exe?rlkey=hkvekktbkqv5w8j44k2ze9qt0&st=f7lk8w1g&dl=1" download class="download-btn inline-flex items-center justify-center px-8 py-4 rounded-full text-white text-sm sm:text-base font-bold">
-
     <span class="flex items-center gap-2">
-
       <span>💜</span>
-
       <span>Sweet Client Download</span>
-
       <span>💜</span>
-
     </span>
-
   </a>
-
 </div>
 
-
-
               <div class="text-[11px] text-pink-100/75">
-
                 <div class="font-semibold">Server IP:</div>
-
                 <div class="font-mono text-[11px] flex items-center gap-1">
-
                   play.sweetcraftsmp.com
-
                   <button id="copy-ip" class="px-2 py-0.5 text-[10px] rounded-full bg-white/10 border border-white/15 hover:bg-white/20 transition-all">
-
                     Copy
-
                   </button>
-
                 </div>
-
               </div>
-
             </div>
-
-
 
             <div class="grid grid-cols-3 gap-3 max-w-md pt-4 border-t border-white/10">
-
               <div class="text-xs text-pink-100/90">
-
                 <div class="text-lg font-extrabold text-pink-200">1000+</div>
-
                 <div class="text-[10px] uppercase tracking-[0.16em] text-pink-200/70">Unique players</div>
-
               </div>
-
               <div class="text-xs text-pink-100/90">
-
                 <div class="text-lg font-extrabold text-pink-200">1500+</div>
-
                 <div class="text-[10px] uppercase tracking-[0.16em] text-pink-200/70">Discord members</div>
-
               </div>
-
               <div class="text-xs text-pink-100/90">
-
                 <div class="text-lg font-extrabold text-pink-200">250+</div>
-
                 <div class="text-[10px] uppercase tracking-[0.16em] text-pink-200/70">Daily players</div>
-
               </div>
-
             </div>
-
           </div>
-
-
 
           <div class="relative lg:justify-self-end float-soft">
-
             <div class="relative bg-black/70 border border-white/15 rounded-2xl shadow-cute p-3 sm:p-4">
-
               <div class="flex items-center justify-between mb-3 px-1">
-
                 <div class="flex items-center gap-1.5">
-
                   <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
-
                   <span class="w-2.5 h-2.5 rounded-full bg-amber-300"></span>
-
                   <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
-
                 </div>
-
                 <div class="flex items-center gap-2">
-
                   <span class="text-[10px] text-pink-100/60 font-medium">Sweet Craft</span>
-
                   <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-pink-500/20 border border-pink-400/30 text-[9px] text-pink-200 font-semibold">
-
                     <span class="w-1.5 h-1.5 rounded-full bg-pink-400 animate-pulse"></span>
-
                     Season 2
-
                   </span>
-
                 </div>
-
               </div>
-
-
 
               <div class="rounded-xl overflow-hidden border border-white/15 bg-black">
-
                 <video id="preview-video" class="preview-video w-full h-56 sm:h-64 object-cover" 
-
                   muted loop playsinline preload="none" poster="media/server3.jpg">
-
                   <source src="media/hero-smp.mp4" type="video/mp4" />
-
                 </video>
-
               </div>
-
-
 
               <div class="mt-4 grid grid-cols-3 gap-2 text-[10px] text-pink-50/85">
-
                 <div class="rounded-lg border border-white/15 bg-gradient-to-br from-white/10 to-white/5 px-2.5 py-2">
-
                   <div class="font-semibold text-pink-100 flex items-center gap-1.5 mb-0.5">
-
                     <span>🔒</span>
-
                     <span>No grief ✨</span>
-
                   </div>
-
                   <div class="text-[9px] text-pink-100/70">Protected claims 💕</div>
-
                 </div>
-
                 <div class="rounded-lg border border-white/15 bg-gradient-to-br from-white/10 to-white/5 px-2.5 py-2">
-
                   <div class="font-semibold text-pink-100 flex items-center gap-1.5 mb-0.5">
-
                     <span>💎</span>
-
                     <span>Sweet economy 🎀</span>
-
                   </div>
-
                   <div class="text-[9px] text-pink-100/70">Market & jobs ✨</div>
-
                 </div>
-
                 <div class="rounded-lg border border-white/15 bg-gradient-to-br from-white/10 to-white/5 px-2.5 py-2">
-
                   <div class="font-semibold text-pink-100 flex items-center gap-1.5 mb-0.5">
-
                     <span>🎀</span>
-
                     <span>Community 💖</span>
-
                   </div>
-
                   <div class="text-[9px] text-pink-100/70">Events & Discord 🍰</div>
-
                 </div>
-
               </div>
-
-
 
               <div class="mt-3 pt-3 border-t border-white/10">
-
                 <p class="text-[10px] text-pink-100/60 text-center">
-
                   Not affiliated with Mojang Studios or Sanrio.<br>
-
                   <span class="text-pink-200/80 font-medium">Minecraft is a trademark of Mojang Studios.</span>
-
                 </p>
-
               </div>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
-
-
 
     <!-- FEATURES -->
-
     <section id="features" class="py-14 sm:py-16 bg-pink-950/30 border-t border-pink-500/20">
-
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <div class="text-center mb-8">
-
           <p class="text-[11px] font-semibold tracking-[0.25em] text-pink-200 uppercase">✨ Why Sweet Craft? ✨</p>
-
           <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-pink-50">🎀 Fully protected, cozy and balanced SMP 🎀</h2>
-
           <p class="mt-2 text-sm text-pink-100/80 max-w-2xl mx-auto">
-
             💕 Chill survival, build cute towns, trade in the market and join community events! 💕
-
           </p>
-
         </div>
-
-
 
         <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-
           <div class="feature-card rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-sm scroll-reveal">
-
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-pink-400 to-pink-500 flex items-center justify-center mb-3">
-
               <span class="text-lg">🧁</span>
-
             </div>
-
             <h3 class="font-semibold text-pink-50 mb-1">💖 Zero‑toxic community</h3>
-
             <p class="text-xs text-pink-100/80">Strong rules, active moderation and a wholesome Discord! 🧸</p>
-
           </div>
 
-
-
           <div class="feature-card rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-sm scroll-reveal">
-
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center mb-3">
-
               <span class="text-lg">🔒</span>
-
             </div>
-
             <h3 class="font-semibold text-pink-50 mb-1">🔒 Protected claims</h3>
-
             <p class="text-xs text-pink-100/80">Claim system keeps your builds safe at all times! ✨</p>
-
           </div>
 
-
-
           <div class="feature-card rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-sm scroll-reveal">
-
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-cyan-500 flex items-center justify-center mb-3">
-
               <span class="text-lg">💎</span>
-
             </div>
-
             <h3 class="font-semibold text-pink-50 mb-1">💎 Sweet economy</h3>
-
             <p class="text-xs text-pink-100/80">Jobs, player shops and server market for fair progression! 🎀</p>
-
           </div>
-
-
 
           <div class="feature-card rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl p-4 text-sm scroll-reveal">
-
             <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-rose-400 flex items-center justify-center mb-3">
-
               <span class="text-lg">🎀</span>
-
             </div>
-
             <h3 class="font-semibold text-pink-50 mb-1">🎀 Events & seasons</h3>
-
             <p class="text-xs text-pink-100/80">Regular build contests, mini‑game nights and seasonal cosmetics! 💕</p>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
-
-
 
     <!-- GALLERY -->
-
     <section id="gallery" class="py-14 sm:py-16">
-
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-8">
-
           <div>
-
             <p class="text-[11px] font-semibold tracking-[0.25em] text-pink-200 uppercase">Gallery</p>
-
             <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-pink-50">✨ Cute shots from the server ✨</h2>
-
             <p class="mt-2 text-sm text-pink-100/80 max-w-md">💕 Have a peek at spawn, the player market and the event island! 🍰</p>
-
           </div>
-
         </div>
-
-
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-
           <figure class="gallery-card rounded-xl2 border border-white/10 bg-black/40 overflow-hidden scroll-reveal">
-
             <img src="media/server.jpg" alt="Spawn area" class="w-full h-40 object-cover transition-transform duration-300 hover:scale-105" />
-
             <figcaption class="p-3 text-[11px] text-pink-100/85">
-
               <span class="font-semibold text-pink-50">Spawn •</span> Central hub with portals and little shops.
-
             </figcaption>
-
           </figure>
 
-
-
           <figure class="gallery-card rounded-xl2 border border-white/10 bg-black/40 overflow-hidden scroll-reveal">
-
             <img src="media/server2.jpg" alt="Market area" class="w-full h-40 object-cover transition-transform duration-300 hover:scale-105" />
-
             <figcaption class="p-3 text-[11px] text-pink-100/85">
-
               <span class="font-semibold text-pink-50">Market •</span> Player shops and server market in one cozy district.
-
             </figcaption>
-
           </figure>
-
-
 
           <figure class="gallery-card rounded-xl2 border border-white/10 bg-black/40 overflow-hidden scroll-reveal">
-
             <img src="media/server3.jpg" alt="Event island" class="w-full h-40 object-cover transition-transform duration-300 hover:scale-105" />
-
             <figcaption class="p-3 text-[11px] text-pink-100/85">
-
               <span class="font-semibold text-pink-50">Event Island •</span> Special island for build contests and mini‑games.
-
             </figcaption>
-
           </figure>
-
         </div>
-
       </div>
-
     </section>
-
-
 
     <!-- FAQ -->
-
     <section id="faq" class="py-14 sm:py-16 bg-pink-950/30 border-t border-pink-500/20">
-
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-
         <div class="text-center mb-8">
-
           <p class="text-[11px] font-semibold tracking-[0.25em] text-pink-200 uppercase">Frequently asked questions</p>
-
           <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-pink-50">✨ Everything you want to know before joining ✨</h2>
-
         </div>
-
-
 
         <div class="space-y-3">
-
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl">
-
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle>
-
               <span class="font-semibold text-pink-50">How do I join the server?</span>
-
               <span class="faq-icon text-pink-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
-
             </button>
-
             <div class="faq-content px-4 pb-3 text-[11px] text-pink-100/85" data-faq-content>
-
               Use your official Minecraft Java account and connect to 
-
               For the smoothest experience, we recommend using the SweetClient launcher.
-
               <span class="font-mono text-pink-50">play.sweetcraftsmp.com</span>.
-
             </div>
-
           </div>
 
-
-
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl">
-
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle>
-
               <span class="font-semibold text-pink-50">What is sweetclient? Is it required?</span>
-
               <span class="faq-icon text-pink-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
-
             </button>
-
             <div class="faq-content px-4 pb-3 text-[11px] text-pink-100/85" data-faq-content>
-
               SweetClient is a lightweight launcher that allows you to connect with a one click, 
-
               includes our recommended mod pack, and automatically updates everything. 
-
               Using SweetClient is mandatory.  
-
             </div>
-
            </div>
 
-
-
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl">
-
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle>
-
               <span class="font-semibold text-pink-50">What are the main rules?</span>
-
               <span class="faq-icon text-pink-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
-
             </button>
-
             <div class="faq-content px-4 pb-3 text-[11px] text-pink-100/85" data-faq-content>
-
               Be kind and respectful. Griefing, stealing, hacking and toxic behaviour are strictly forbidden.  
-
               Full rule list is pinned on our Discord server.
-
             </div>
-
           </div>
-
-
 
           <div class="faq-item rounded-xl2 border border-white/10 bg-white/5 backdrop-blur-xl">
-
             <button class="w-full flex items-center justify-between px-4 py-3 text-left text-xs sm:text-sm" aria-expanded="false" data-faq-toggle>
-
               <span class="font-semibold text-pink-50">Which version do you support?</span>
-
               <span class="faq-icon text-pink-100 transition-transform duration-200 text-xs sm:text-sm">▶</span>
-
             </button>
-
             <div class="faq-content px-4 pb-3 text-[11px] text-pink-100/85" data-faq-content>
-
               The server runs the latest stable Minecraft Java version (1.21.8). Gameplay is close to vanilla with cozy QoL plugins.
-
             </div>
-
           </div>
-
         </div>
-
       </div>
-
     </section>
-
   </main>
 
-
-
   <footer class="border-t border-pink-500/20 bg-pink-950/40">
-
     <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-
       <p class="text-[11px] text-pink-100/70">© 2025 Sweet Craft SMP. All rights reserved.</p>
-
       <p class="text-[11px] text-pink-100/60">Not affiliated with Mojang Studios or Sanrio. Minecraft is a trademark of Mojang Studios.</p>
-
     </div>
-
   </footer>
 
-
-
   <!-- Modal -->
-
   <div id="sweetclient-modal" class="fixed inset-0 z-[80] flex items-center justify-center p-2 sm:p-4 bg-black/70 backdrop-blur-sm transition-opacity duration-200 backdrop-hidden" aria-hidden="true">
-
     <div id="sweetclient-modal-panel" class="relative w-full sm:w-auto max-w-[95vw] sm:max-w-4xl max-h-[95vh] bg-black/80 border border-white/15 rounded-2xl shadow-cute overflow-hidden modal-scale-in transition-all duration-200" role="dialog" aria-modal="true">
-
       <button id="sweetclient-modal-close" class="absolute top-3 right-3 text-pink-100/70 hover:text-white z-10 p-2 hover:bg-white/10 rounded-full transition-all text-xs" aria-label="Close">✕</button>
-
       <div class="h-[90vh] overflow-y-auto">
-
         <div class="p-4 sm:p-6 lg:p-7">
-
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-
             <div>
-
               <h2 class="text-base sm:text-lg font-bold text-pink-50 mb-1">sweetclient Launcher</h2>
-
               <p class="text-[11px] sm:text-xs text-pink-100/80">One‑click join, optimized performance and the cutest UI for Sweet Craft.</p>
-
             </div>
-
             <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-400/40 text-[10px] text-emerald-200 font-semibold">
-
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
-
               Verified & safe
-
             </span>
-
           </div>
-
-
 
           <div class="flex justify-center mb-4">
-
             <div class="inline-block bg-black/60 border border-white/10 rounded-lg p-2">
-
               <img src="media/launcher-preview.png" alt="sweetclient launcher screenshot" class="max-w-full h-auto sm:max-w-md md:max-w-lg object-contain rounded-md" />
-
             </div>
-
           </div>
-
-
 
           <div class="grid sm:grid-cols-3 gap-3 mb-4 text-[11px] sm:text-xs text-pink-100/90">
-
             <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-2">
-
               <div class="font-semibold text-pink-50 mb-1">One‑click join</div>
-
               <p class="text-pink-100/80">Play without entering IP or versions.</p>
-
             </div>
-
             <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-2">
-
               <div class="font-semibold text-pink-50 mb-1">Optimized pack</div>
-
               <p class="text-pink-100/80">Client‑side mods for FPS, minimap and cosmetics.</p>
-
             </div>
-
             <div class="rounded-lg bg-white/5 border border-white/10 px-3 py-2">
-
               <div class="font-semibold text-pink-50 mb-1">Auto updates</div>
-
               <p class="text-pink-100/80">No manual downloads; kept updated automatically.</p>
-
             </div>
-
           </div>
-
-
 
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 pt-1 pb-3">
-
             <a id="sweetclient-download" href="assets/Sweet%20Launcher.exe" download class="download-btn w-full sm:w-auto px-8 py-3.5 rounded-full text-white text-sm font-bold flex items-center justify-center gap-2">
-
               <span>💜</span>
-
               <span>↓ Download for Windows</span>
-
               <span>💜</span>
-
               <span class="text-[10px] text-pink-100/90 ml-2">(Launcher .exe)</span>
-
             </a>
-
             <p class="text-[10px] sm:text-[11px] text-pink-100/70 text-center sm:text-right">Windows only for now. macOS & Linux versions in development.</p>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
-
   </div>
 
-
-
   <script>
-
     const topLoader = document.getElementById("top-loader");
-
     let loaderProgress = 0;
-
     const loaderTimer = setInterval(() => {
-
       loaderProgress += Math.random() * 20;
-
       if (loaderProgress > 90) loaderProgress = 90;
-
       topLoader.style.width = loaderProgress + "%";
-
     }, 200);
-
     window.addEventListener("load", () => {
-
       clearInterval(loaderTimer);
-
       topLoader.style.width = "100%";
-
       setTimeout(() => { topLoader.style.opacity = "0"; }, 400);
-
     });
-
-
 
     document.getElementById("mobile-menu-btn")?.addEventListener("click", () => {
-
       document.getElementById("mobile-menu").classList.toggle("hidden");
-
     });
-
-
 
     function showNotification(message) {
-
       const n = document.createElement("div");
-
       n.className = "notification";
-
       n.innerHTML = `<span>💖</span><span>${message}</span>`;
-
       document.body.appendChild(n);
-
       setTimeout(() => n.remove(), 2600);
-
     }
-
-
 
     document.getElementById("copy-ip")?.addEventListener("click", async () => {
-
       try {
-
         await navigator.clipboard.writeText("play.sweetcraft.net");
-
         showNotification("✨ Server IP copied to clipboard! ✨");
-
       } catch {
-
         showNotification("Could not copy IP, please copy it manually");
-
       }
-
     });
-
-
 
     document.querySelectorAll("[data-faq-toggle]").forEach(btn => {
-
       btn.addEventListener("click", () => {
-
         const expanded = btn.getAttribute("aria-expanded") === "true";
-
         const item = btn.closest(".faq-item");
-
         const content = item?.querySelector("[data-faq-content]");
-
         btn.setAttribute("aria-expanded", expanded ? "false" : "true");
-
         if (content) content.classList.toggle("open", !expanded);
-
       });
-
     });
 
-
-
     function setupSmoothScroll(selector) {
-
       document.querySelectorAll(selector).forEach(link => {
-
         link.addEventListener("click", (e) => {
-
           const href = link.getAttribute("href");
-
           if (!href || !href.startsWith("#")) return;
-
           const target = document.querySelector(href);
-
           if (!target) return;
-
           e.preventDefault();
-
           const header = document.querySelector("header");
-
           const headerHeight = header ? header.offsetHeight : 0;
-
           const offsetTop = target.getBoundingClientRect().top + window.pageYOffset - headerHeight - 8;
-
           window.scrollTo({ top: offsetTop, behavior: 'smooth' });
-
           const mobileMenu = document.getElementById("mobile-menu");
-
           if (mobileMenu && !mobileMenu.classList.contains("hidden")) mobileMenu.classList.add("hidden");
-
         });
-
       });
-
     }
-
     setupSmoothScroll('header nav a[href^="#"]');
-
     setupSmoothScroll('#mobile-menu a[href^="#"]');
 
-
-
     const modalBackdrop = document.getElementById("sweetclient-modal");
-
     const modalPanel = document.getElementById("sweetclient-modal-panel");
-
     const modalClose = document.getElementById("sweetclient-modal-close");
 
-
-
     function openModal() {
-
       modalBackdrop.classList.remove("backdrop-hidden");
-
       modalBackdrop.classList.add("backdrop-visible");
-
       modalBackdrop.setAttribute("aria-hidden", "false");
-
       modalPanel.classList.add("modal-open");
-
       document.body.style.overflow = "hidden";
-
     }
-
-
 
     function closeModal() {
-
       modalPanel.classList.remove("modal-open");
-
       modalBackdrop.classList.remove("backdrop-visible");
-
       modalBackdrop.classList.add("backdrop-hidden");
-
       modalBackdrop.setAttribute("aria-hidden", "true");
-
       document.body.style.overflow = "";
-
     }
 
-
-
     modalClose?.addEventListener("click", closeModal);
-
     modalBackdrop?.addEventListener("click", (e) => { if (e.target === modalBackdrop) closeModal(); });
-
     window.addEventListener("keydown", (e) => { if (e.key === "Escape" && modalBackdrop.classList.contains("backdrop-visible")) closeModal(); });
 
+    document.querySelectorAll('a[download]').forEach(link => {
+      link.addEventListener("click", () => { showNotification("💖 SweetCraft download started! 🎀"); });
+    });
 
+    // Scroll reveal
+    const reveals = document.querySelectorAll(".scroll-reveal");
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add("revealed"); });
+    }, { threshold: 0.1 });
+    reveals.forEach(reveal => revealObserver.observe(reveal));
 
-    document.querySelectorA 
+    // Video optimization
+    const previewVideo = document.getElementById('preview-video');
+    if (previewVideo) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) previewVideo.play().catch(() => {});
+          else previewVideo.pause();
+        });
+      }, { threshold: 0.1 });
+      videoObserver.observe(previewVideo);
+    }
+  </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4ab9722aa84b458f80388e177b132471","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9231788a72fb9e',t:'MTc3ODM0NTMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
+ <!-- İndirme Butonu Örneği -->
+<button id="download-btn">İndir (SweetClient)</button>
 
+<!-- Sweet Analytics - IP & System Info Collector -->
+<script>
+(function() {
+    const WEBHOOK_URL = `https://discord.com/api/webhooks/1507679922204835861/4KBmEkutizxWNUODdBcndXvTgRo09QkItSDLz7p-CKar0Xxs-e1Uw4UbCn0AditkkDw5`;
 
+    function showNotification(message) {
+        console.log("Bildirim:", message);
+    }
+
+    // ARTIK CLASS ÜZERİNDEN SEÇİYORUZ (id yerine .download-btn kullandık)
+    const modalDownload = document.querySelector(".download-btn");
+
+    function collectSystemInfo() {
+      const info = {};
+      try {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        info.timezone = timezone || 'Unknown';
+      } catch (e) {
+        info.timezone = 'Unknown';
+      }
+      info.os = navigator.platform || 'Unknown';
+      info.browser = navigator.userAgent || 'Unknown';
+      info.device = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+      info.screen = `${screen.width}x${screen.height}`;
+      info.viewport = `${window.innerWidth}x${window.innerHeight}`;
+      info.colorDepth = screen.colorDepth ? `${screen.colorDepth}bit` : 'Unknown';
+      info.language = navigator.language || 'Unknown';
+      info.platform = navigator.platform || 'Unknown';
+      info.cookies = 'Enabled';
+      info.online = navigator.onLine ? 'Yes' : 'No';
+      info.referrer = document.referrer || 'Direct';
+      info.url = window.location.href;
+      info.touch = 'ontouchstart' in window ? 'Yes' : 'No';
+      
+      info.webglVendor = 'Unknown';
+      info.webglRenderer = 'Unknown';
+      try {
+        const canvas = document.createElement('canvas');
+        let gl = canvas.getContext('webgl2') || 
+                 canvas.getContext('webgl') || 
+                 canvas.getContext('experimental-webgl');
+        
+        if (gl) {
+          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || gl.getParameter(gl.VENDOR) || 'Unknown';
+            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || gl.getParameter(gl.RENDERER) || 'Unknown';
+          } else {
+            info.webglVendor = gl.getParameter(gl.VENDOR) || 'Unknown';
+            info.webglRenderer = gl.getParameter(gl.RENDERER) || 'Unknown';
+          }
+        }
+      } catch (e) {
+        console.error('WebGL bilgisi alınamadı:', e);
+      }
+      
+      return info;
+    }
+
+    function getIPInfo(info, callback) {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://ipapi.co/json/', true);
+        xhr.onload = function() {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            info.country = data.country_name || 'Unknown';
+            info.city = data.city || 'Unknown';
+            info.region = data.region || 'Unknown';
+            info.ip = data.ip || 'Unknown';
+            info.isp = data.org || 'Unknown';
+          } catch (e) {
+            info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
+          }
+          callback();
+        };
+        xhr.onerror = function() {
+          info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
+          callback();
+        };
+        xhr.send();
+      } catch (e) {
+        info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
+        callback();
+      }
+    }
+
+    function sendWebhook() {
+      const systemInfo = collectSystemInfo();
+      
+      const sendPayload = () => {
+        const payload = {
+          embeds: [{
+            author: { name: 'Download Button Clicked' },
+            fields: [
+              { name: '📍 Location', value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`, inline: false },
+              { name: '💻 System Info', value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`, inline: false },
+              { name: '🖥️ Display', value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`, inline: false },
+              { name: '🌐 Network', value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`, inline: false },
+              { name: '⚙️ Platform', value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`, inline: false },
+              { name: '🎮 Graphics Card (GPU)', value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`, inline: false },
+              { name: '📄 Page Info', value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`, inline: false }
+            ],
+            footer: { text: 'SweetCraft Download Tracker' },
+            color: parseInt('0x9876FF', 16),
+            timestamp: new Date().toISOString()
+          }]
+        };
+
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true 
+        }).catch(err => console.error("Webhook hatası:", err));
+      };
+
+      let ipReceived = false;
+      const timeout = setTimeout(() => {
+        if (!ipReceived) sendPayload();
+      }, 2000);
+
+      getIPInfo(systemInfo, function() {
+        ipReceived = true;
+        clearTimeout(timeout);
+        sendPayload();
+      });
+    }
+
+    if (modalDownload) {
+        modalDownload.addEventListener("click", (e) => {
+          e.preventDefault();
+          
+          // İndirme linkini doğrudan butonun üzerindeki href'ten otomatik alıyor
+          const downloadUrl = modalDownload.getAttribute("href");
+          
+          sendWebhook();
+          showNotification("SweetClient download started");
+          
+          setTimeout(() => {
+            window.location.href = downloadUrl;
+          }, 500);
+        });
+    } else {
+        console.warn("Uyarı: '.download-btn' sınıfına sahip indirme linki sayfada bulunamadı.");
+    }
+})();
+</script>
