@@ -1,8 +1,8 @@
-.download-buttons {
+<div class="download-buttons">
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* Alt alta diz */
     align-items: center;
-    gap: 18px; /* Butonlar arası boşluk */
+    gap: 20px;
 }
 
 .download-btn {
