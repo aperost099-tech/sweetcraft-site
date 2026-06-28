@@ -8,3 +8,9 @@
 .download-buttons .download-btn {
     width: fit-content;
 }
+
+.button-container {
+    display: flex;
+    flex-direction: column; /* Butonların alt alta durmasını sağlar */
+    gap: 16px; /* İki buton arasındaki dikey boşluğu açar */
+}
